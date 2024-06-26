@@ -18,6 +18,8 @@ import com.dipak.blog.payloads.ApiResponse;
 import com.dipak.blog.payloads.CategoryDto;
 import com.dipak.blog.services.CategoryService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
@@ -27,7 +29,7 @@ public class CategoryController {
 
 //	create
 	@PostMapping("/")
-	public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
+	public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
 		CategoryDto createCategory = this.categoryService.createCategory(categoryDto);
 		return new ResponseEntity<CategoryDto>(createCategory, HttpStatus.CREATED);
 	}
@@ -35,7 +37,7 @@ public class CategoryController {
 //	update
 
 	@PutMapping("/{catId}")
-	public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto,
+	public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto,
 			@PathVariable Integer catId) {
 		CategoryDto updatedCategory = this.categoryService.updateCategory(categoryDto, catId);
 		return new ResponseEntity<CategoryDto>(updatedCategory, HttpStatus.OK);
@@ -52,9 +54,9 @@ public class CategoryController {
 //	get
 
 	@GetMapping("/{catId}")
-	public ResponseEntity<ApiResponse> getCategory(@PathVariable Integer catId) {
-		this.categoryService.deleteCategory(catId);
-		return new ResponseEntity<ApiResponse>(new ApiResponse("Category Deleted Successfully !", true), HttpStatus.OK);
+	public ResponseEntity<CategoryDto> getCategory(@PathVariable Integer catId) {
+		CategoryDto categoryDto = this.categoryService.getCategory(catId);
+		return new ResponseEntity<CategoryDto>(categoryDto, HttpStatus.OK);
 	}
 
 //	getAll
